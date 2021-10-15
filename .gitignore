@@ -1,0 +1,4 @@
+run.bat
+run.sh
+*.idea
+*__pycache__
