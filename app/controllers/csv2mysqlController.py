@@ -1,5 +1,5 @@
-from app.pipelines.migration.csv_to_mysql.CSVpreparation import CSVToDf
-from app.pipelines.migration.csv_to_mysql.ToMysql import DfToMysql
+from app.pipelines.migration.csv_to_db.CSVpreparation import CSVToDf
+from app.pipelines.migration.csv_to_db.ToMysql import DfToMysql
 from os import environ as env
 from flask import jsonify
 

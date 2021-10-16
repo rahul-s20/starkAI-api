@@ -8,6 +8,7 @@ from app.controllers.transcriptController import transcriptController
 from app.controllers.apiKeyController import assignKey
 from app.models.modalone import database
 from app.controllers.csv2mysqlController import CSV2Mysql
+from app.controllers.csv2postgresqlController import CSV2Postgresql
 import ast
 
 blueprint_api = Blueprint("blueprint_api", __name__)
@@ -47,7 +48,7 @@ def apiKeyGenerate_route():
     return res
 
 
-@blueprint_api.route('/api/v1/migrate/csv_to_mysql', methods=['POST'])
+@blueprint_api.route('/api/v1/migrate/csv_to_mysql_db', methods=['POST'])
 def csv2mysql_route():
     reqdetails = validate_request('aws_details', 'mysql_details', 'content_details')
     reqdetails['aws_details'] = ast.literal_eval(reqdetails['aws_details'])
@@ -80,5 +81,42 @@ def csv2mysql_route():
                                               type_of_insertion=reqdetails['content_details']['type_of_insertion'],
                                               db_table=reqdetails['content_details']['db_table'],
                                               )
+
+    return res
+
+
+@blueprint_api.route('/api/v1/migrate/csv_to_postgres_db', methods=['POST'])
+def csv2mysql_route():
+    reqdetails = validate_request('aws_details', 'psql_details', 'content_details')
+    reqdetails['aws_details'] = ast.literal_eval(reqdetails['aws_details'])
+    reqdetails['psql_details'] = ast.literal_eval(reqdetails['psql_details'])
+    reqdetails['content_details'] = ast.literal_eval(reqdetails['content_details'])
+    if reqdetails['aws_details']['endpoint'] is not "":
+        csvtopsql_obj = CSV2Postgresql(endpoint=reqdetails['aws_details']['endpoint'],
+                                       accesskey=reqdetails['aws_details']['accesskey'],
+                                       secretkey=reqdetails['aws_details']['secretkey'],
+                                       region=reqdetails['aws_details']['region'],
+                                       usr=reqdetails['psql_details']['user'],
+                                       pwd=reqdetails['psql_details']['password'],
+                                       hst=reqdetails['psql_details']['host'],
+                                       db=reqdetails['psql_details']['db'],
+                                       )
+    else:
+        csvtopsql_obj = CSV2Postgresql(accesskey=reqdetails['aws_details']['accesskey'],
+                                       secretkey=reqdetails['aws_details']['secretkey'],
+                                       usr=reqdetails['psql_details']['user'],
+                                       pwd=reqdetails['psql_details']['password'],
+                                       hst=reqdetails['psql_details']['host'],
+                                       db=reqdetails['psql_details']['db'],
+                                       )
+
+    res = csvtopsql_obj.migrate_csv_to_postgresql(bucket=reqdetails['content_details']['bucket'],
+                                                  key=reqdetails['content_details']['key'],
+                                                  columns=reqdetails['content_details']['columns'],
+                                                  default_values=reqdetails['content_details']['default_values'],
+                                                  add_primaryKey=bool(reqdetails['content_details']['add_primaryKey']),
+                                                  type_of_insertion=reqdetails['content_details']['type_of_insertion'],
+                                                  db_table=reqdetails['content_details']['db_table'],
+                                                  )
 
     return res
