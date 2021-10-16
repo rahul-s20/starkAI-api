@@ -8,6 +8,7 @@ from app.controllers.transcriptController import transcriptController
 from app.controllers.apiKeyController import assignKey
 from app.models.modalone import database
 from app.controllers.csv2mysqlController import CSV2Mysql
+import ast
 
 blueprint_api = Blueprint("blueprint_api", __name__)
 
@@ -49,6 +50,9 @@ def apiKeyGenerate_route():
 @blueprint_api.route('/api/v1/migrate/csv_to_mysql', methods=['POST'])
 def csv2mysql_route():
     reqdetails = validate_request('aws_details', 'mysql_details', 'content_details')
+    reqdetails['aws_details'] = ast.literal_eval(reqdetails['aws_details'])
+    reqdetails['mysql_details'] = ast.literal_eval(reqdetails['mysql_details'])
+    reqdetails['content_details'] = ast.literal_eval(reqdetails['content_details'])
     if reqdetails['aws_details']['endpoint'] is not "":
         csvtomysql_obj = CSV2Mysql(endpoint=reqdetails['aws_details']['endpoint'],
                                    accesskey=reqdetails['aws_details']['accesskey'],
