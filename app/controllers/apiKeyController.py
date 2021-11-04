@@ -1,20 +1,21 @@
 from app.common.helpers.helper import keyGenerate
 from flask import jsonify
-from app.models.modalone import Keys
-from app.models.modalone import database
+from app.models.keyModel import Keys
+from sqlalchemy.orm import Session
+from app.config.base import STARKBase
+from app.schema.KeySchema import Keyssc
 
 
-def assignKey(email: str):
-    response = {}
+def assignKey(email: Keyssc, db: Session):
     try:
+        stark_base = STARKBase(Keys)
         api_key = keyGenerate(keyLen=16)
-        user = Keys.query.filter_by(email=email["email"]).first()
+        user = stark_base.get_user_by_email(db=db, email=email.email)
         if user is None:
-            newUser = Keys(api_key=api_key, email=email["email"])
-            database.session.add(newUser)
-            database.session.commit()
-            getuser = Keys.query.filter_by(email=email["email"]).first()
-            response = {"res": "Your api key is generated", "user": f"{getuser}"}
+            email.api_key = api_key
+            stark_base.create(db=db, obj_in = email)
+            getuser = stark_base.get_user_by_email(db=db, email=email.email)
+            response = {"res": "Your api key is generated", "user": getuser}
         else:
             response = {"res": "Email is already in use, please enter a different email", "user": {}}
         return {"status": True, "type": "apiKeyGeneration", "data": response}

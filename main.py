@@ -1,6 +1,7 @@
 from app import create_app
+import uvicorn
 
 app = create_app()
 
 if __name__ == "__main__":
-    app.run(debug=False, port=5001)
+    uvicorn.run(app, port=5001)
