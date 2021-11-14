@@ -25,9 +25,14 @@ class CSV2Mysql:
                                                   add_primaryKey=add_primaryKey)
             if df is not None:
                 self.mysqlengine.migrateToMysql(df=df, type_of_insertion=type_of_insertion, db_table=db_table)
-            res = {"status": True, "type": "csv2Mysql", "data": "Data has been migrated successfully"}
-            return JSONResponse(content=res)
+            return {"status": True, "type": "csv2Mysql", "data": "Data has been migrated successfully"}
 
         except Exception as er:
-            res = {"status": False, "type": "csv2Mysql", "data": f"{er.__cause__}"}
-            return JSONResponse(content=res)
+            # res = {"status": False, "type": "csv2Mysql", "data": f"{er.__cause__}"}
+            # return JSONResponse(content=res)
+            return {"status": False, "type": "csv2Mysql", "data": f"{er.__cause__}"}
+
+
+def check(text):
+    print(text)
+    return text
