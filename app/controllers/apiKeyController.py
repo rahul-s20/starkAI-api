@@ -1,5 +1,4 @@
 from app.common.helpers.helper import keyGenerate
-from flask import jsonify
 from app.models.keyModel import Keys
 from sqlalchemy.orm import Session
 from app.config.base import STARKBase
@@ -20,4 +19,4 @@ def assignKey(email: Keyssc, db: Session):
             response = {"res": "Email is already in use, please enter a different email", "user": {}}
         return {"status": True, "type": "apiKeyGeneration", "data": response}
     except Exception as er:
-        return jsonify(status=False, type="apiKeyGeneration", data=f"{er}")
+        return {"status": False, "type": "apiKeyGeneration", "data": f"{er}"}

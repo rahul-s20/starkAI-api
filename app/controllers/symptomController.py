@@ -1,4 +1,3 @@
-from flask import jsonify
 from app.common.datapreprocessing.input_processer import input_data_scaling, input_data_conversion_symptom
 from app.common.makedecision.makedecision import Decision
 from app.helpers.initiater import symptometic_response_init

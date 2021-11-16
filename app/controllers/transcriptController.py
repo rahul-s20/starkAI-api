@@ -1,5 +1,4 @@
 
-from flask import jsonify
 from app.common.helpers.helper import transcript_string_formation
 from youtube_transcript_api import YouTubeTranscriptApi
 from app.common.transcript.transcript_tokenizer import TranscriptsT5F
