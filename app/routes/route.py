@@ -18,6 +18,7 @@ from fastapi.responses import JSONResponse
 from app.pipelines.migration.csv_to_db.tasks import csv_to_sql_task_run
 from app.controllers.sql2sqlController import SQL2SQL
 from app.schema.Sql2SqlSchema import Sql2SqlSchema
+from app.pipelines.migration.Sql_to_Sql.tasks import sql_to_sql_task_run
 
 router = APIRouter()
 
@@ -75,21 +76,16 @@ async def csv2mysql_route(req_details: Csv2MysqlSchema):
 
 @router.post('/api/v1/migrate/sql_to_sql')
 def sql2sql_route(req_details: Sql2SqlSchema):
-    src_sql_obj = SQL2SQL(usr=req_details.src_mysql_details.user,
-                          pwd=req_details.src_mysql_details.password,
-                          hst=req_details.src_mysql_details.host,
-                          db=req_details.src_mysql_details.db)
-    xz = src_sql_obj.migrate_data_to_sql(src_table_name=req_details.content_details.src_db_table,
-                                         trgt_table_name=req_details.content_details.trgt_db_table,
-                                         extra_columns=req_details.content_details.extra_columns,
-                                         type_of_insertion=req_details.content_details.type_of_insertion,
-                                         usr=req_details.trgt_sql_details.user,
-                                         pwd=req_details.trgt_sql_details.password,
-                                         hst=req_details.trgt_sql_details.host,
-                                         db=req_details.trgt_sql_details.db)
-
-    response = {"status": True, "type": "Sql2Sql", "data": "Sql Data has been migrated successfully"}
-    return JSONResponse(content=xz)
+    try:
+        sql_to_sql_task_run.delay(
+            req_details.src_mysql_details.user, req_details.src_mysql_details.password,
+            req_details.src_mysql_details.host, req_details.src_mysql_details.db, req_details.trgt_sql_details.user,
+            req_details.trgt_sql_details.password, req_details.trgt_sql_details.host, req_details.trgt_sql_details.db,
+            req_details.content_details.src_db_table, req_details.content_details.trgt_db_table,
+            req_details.content_details.extra_columns, req_details.content_details.type_of_insertion)
+        return JSONResponse(content={"status": True, "type": "Sql2Sql", "data": "Sql Data has been migrated successfully"})
+    except Exception as er:
+        return JSONResponse(content={"status": False, "type": "Sql2Sql", "data": f"{er.__cause__}"})
 
 
 @router.post('/api/v1/migrate/csv_to_postgres_db')
