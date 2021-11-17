@@ -1,5 +1,4 @@
 run.bat
-run.sh
 *.idea
 *__pycache__
 progress.py
