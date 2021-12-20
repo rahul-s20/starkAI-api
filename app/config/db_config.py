@@ -1,8 +1,9 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from app.config.base_class import Base
+from os import environ as env
 
-SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:123456789@localhost/stark_dev'
+SQLALCHEMY_DATABASE_URI = env['SQLDBURI']
 
 engine = create_engine(
     SQLALCHEMY_DATABASE_URI,

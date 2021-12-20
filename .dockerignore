@@ -1,0 +1,6 @@
+*.idea
+*__pycache__
+progress.py
+*starkvenv
+*stark_env
+*venv

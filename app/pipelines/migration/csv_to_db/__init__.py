@@ -1,7 +1,8 @@
 from celery import Celery
 from celery.utils.log import get_task_logger
+from os import environ as env
 
-app = Celery('csv_to_db_migration', broker='redis://localhost:6379/0', backend='redis://localhost:6379')
+app = Celery('csv_to_db_migration', broker=f'{env["REDIS_ENDPOINT"]}/0', backend='{env["REDIS_ENDPOINT"]}')
 
 # Create logger - enable to display messages on task logger
 celery_log = get_task_logger(__name__)

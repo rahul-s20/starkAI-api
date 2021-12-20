@@ -1,0 +1,1 @@
+docker build -t rsarkar20/strakai-api:latest .
