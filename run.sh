@@ -15,4 +15,4 @@ export HOST='127.0.0.1:3306'
 export DB='stark_dev'
 
 echo -e "******************************RION-Stark****************************"
-python3 main.py main:app --reload --port 5001
+python main.py main:app --reload --port 5001

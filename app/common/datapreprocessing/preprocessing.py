@@ -1,23 +1,15 @@
 from sklearn.impute import SimpleImputer
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OneHotEncoder
-from sklearn.feature_extraction.text import CountVectorizer
 import numpy as np
 
 
-class Vectorizer:
-    def __init__(self):
-        self.CV = CountVectorizer()
-
-    def vectorized(self, i_data: np.ndarray, transform_type: str = 'fit_transform'):
-        output_list = []
-        for i in i_data.tolist():
-            a = ' '.join(map(str, i))
-            output_list.append(a)
-        if transform_type is 'fit_transform':
-            return self.CV.fit_transform(output_list)
-        else:
-            return self.CV.transform(output_list)
+def convert_to_list(i_data: np.ndarray) -> list:
+    output_list = []
+    for i in i_data.tolist():
+        a = ' '.join(map(str, i))
+        output_list.append(a)
+    return output_list
 
 
 def encoder(columns: list, remainder: str, i_data: list):

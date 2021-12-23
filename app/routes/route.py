@@ -1,4 +1,4 @@
-from app.controllers.symptomController import symptomController
+from app.controllers.symptomController import symptomController, saveSymptomModelController
 from app.controllers.langTranslationController import langTranslationController
 from app.controllers.transcriptController import transcriptController
 from app.controllers.apiKeyController import assignKey
@@ -21,6 +21,12 @@ from app.schema.Sql2SqlSchema import Sql2SqlSchema
 from app.pipelines.migration.Sql_to_Sql.tasks import sql_to_sql_task_run
 
 router = APIRouter()
+
+
+@router.get("/api/v1/generate_symptom_model")
+def symptom_modelsave_route():
+    res = saveSymptomModelController()
+    return res
 
 
 @router.post("/api/v1/symptom_disease")
@@ -83,7 +89,8 @@ def sql2sql_route(req_details: Sql2SqlSchema):
             req_details.trgt_sql_details.password, req_details.trgt_sql_details.host, req_details.trgt_sql_details.db,
             req_details.content_details.src_db_table, req_details.content_details.trgt_db_table,
             req_details.content_details.extra_columns, req_details.content_details.type_of_insertion)
-        return JSONResponse(content={"status": True, "type": "Sql2Sql", "data": "Sql Data has been migrated successfully"})
+        return JSONResponse(
+            content={"status": True, "type": "Sql2Sql", "data": "Sql Data has been migrated successfully"})
     except Exception as er:
         return JSONResponse(content={"status": False, "type": "Sql2Sql", "data": f"{er.__cause__}"})
 
