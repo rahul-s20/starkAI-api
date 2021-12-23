@@ -6,12 +6,12 @@ from app.schema.SymptopmSchema import SymptopmSchema
 
 
 def symptomController(symptoms: SymptopmSchema) -> JSONResponse:
-    '''
+    """
 
     :param symptoms:
     :return: predicted deases
     This the entrypoint after route to decide the deases based on the symptoms
-    '''
+    """
     try:
         decision_obj = Decision(n_estimators=100, criterion='entropy')
         symptoms = symptoms.symptoms.split(",")
@@ -26,10 +26,10 @@ def symptomController(symptoms: SymptopmSchema) -> JSONResponse:
 
 
 def saveSymptomModelController() -> JSONResponse:
-    '''
+    """
 
     :return: Save the symptom model based on availbe data in s3
-    '''
+    """
     try:
         i_data, o_data = io_symptoms()
         decision_obj = Decision(n_estimators=100, criterion='entropy')

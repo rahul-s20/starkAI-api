@@ -10,11 +10,12 @@ class S3_Helper:
                                                aws_secret_access_key=aws_secret,
                                                region_name=region_name)
         else:
-            self.boto3_session = boto3.Session('s3')
+            self.boto3_session = boto3.Session(aws_access_key_id=aws_access,
+                                               aws_secret_access_key=aws_secret)
 
     def read_csv_s3(self, src_path: str):
         try:
-            data = wr.s3.read_csv(f"{src_path}", boto3_session=self.boto3_session)
+            data = wr.s3.read_csv(f"{src_path}", boto3_session=self.boto3_session, encoding='utf-8')
             return data
         except Exception as er:
             print(f"error: Unable to read csv: {er}")

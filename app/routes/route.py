@@ -19,8 +19,15 @@ from app.pipelines.migration.csv_to_db.tasks import csv_to_sql_task_run
 from app.controllers.sql2sqlController import SQL2SQL
 from app.schema.Sql2SqlSchema import Sql2SqlSchema
 from app.pipelines.migration.Sql_to_Sql.tasks import sql_to_sql_task_run
+from app.controllers.resumeScreeningController import saveResumeScreeningModel
 
 router = APIRouter()
+
+
+@router.get("/api/v1/generate_resume_model")
+def resume_modelsave_route():
+    res = saveResumeScreeningModel()
+    return res
 
 
 @router.get("/api/v1/generate_symptom_model")
