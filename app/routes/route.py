@@ -1,6 +1,5 @@
 from app.controllers.symptomController import symptomController, saveSymptomModelController
 from app.controllers.langTranslationController import langTranslationController
-from app.controllers.transcriptController import transcriptController
 from app.controllers.apiKeyController import assignKey
 
 from sqlalchemy.orm import Session
@@ -11,7 +10,6 @@ from app.controllers.csv2postgresqlController import CSV2Postgresql
 from fastapi import APIRouter, Depends
 from app.schema.Csv2MysqlSchema import Csv2MysqlSchema
 from app.schema.TranslateSchema import TranslateSchema
-from app.schema.TransriptSchema import TransriptSchema
 from app.schema.SymptopmSchema import SymptopmSchema
 from app.schema.KeySchema import Keyssc
 from fastapi.responses import JSONResponse
@@ -19,7 +17,8 @@ from app.pipelines.migration.csv_to_db.tasks import csv_to_sql_task_run
 from app.controllers.sql2sqlController import SQL2SQL
 from app.schema.Sql2SqlSchema import Sql2SqlSchema
 from app.pipelines.migration.Sql_to_Sql.tasks import sql_to_sql_task_run
-from app.controllers.resumeScreeningController import saveResumeScreeningModel
+from app.controllers.resumeScreeningController import saveResumeScreeningModel, resumeScreeningController
+from app.schema.ResumeScreeningSchema import ResumeScreeningSchema
 
 router = APIRouter()
 
@@ -42,15 +41,15 @@ def symptom_route(input_details: SymptopmSchema):
     return res
 
 
-@router.post("/api/v1/translate")
-def translation_route(input_details: TranslateSchema):
-    res = langTranslationController(input_text=input_details)
+@router.post("/api/v1/resume_screening")
+def symptom_route(input_details: ResumeScreeningSchema):
+    res = resumeScreeningController(input_skills=input_details)
     return res
 
 
-@router.post("/api/v1/transcript")
-def transcript_route(input_details: TransriptSchema):
-    res = transcriptController(vid_id=input_details)
+@router.post("/api/v1/translate")
+def translation_route(input_details: TranslateSchema):
+    res = langTranslationController(input_text=input_details)
     return res
 
 

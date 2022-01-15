@@ -26,7 +26,7 @@ class Decision:
             joblib.dump(self.rf, model_filename)
             return 'Symptom model is saved successfully'
         except Exception as er:
-            return er
+            return f"{er}"
 
     def deciderV2(self, strategy: str = 'mean', input_data=None):
         try:

@@ -34,6 +34,10 @@ def single_missingDataHandler(i_data: np.ndarray = None, strategy: str = 'mean')
     if strategy == 'constant':
         si = SimpleImputer(missing_values=np.nan, strategy=strategy, fill_value='NA')
     else:
+        print("xxxxxxxxxxxx")
+        print(i_data)
         si = SimpleImputer(missing_values=np.nan, strategy=strategy)
+        print("yyyyyyyyyyyyyyyy")
+        print(si)
     i_data = si.fit_transform(i_data[:, :])
     return i_data
