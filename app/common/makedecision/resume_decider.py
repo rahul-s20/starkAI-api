@@ -6,6 +6,7 @@ from sklearn.neighbors import KNeighborsClassifier
 import joblib
 import pandas as pd
 import PyPDF2
+from app.helpers.initiater import cleanDataset
 
 
 class ResumeDecisionMaker:
@@ -36,17 +37,17 @@ def decider(input_data: list):
     try:
         loaded_vectorizer = joblib.load('DataModels/ResumeModel_vector.sav')
         clf = joblib.load('DataModels/ResumeModel.sav')
-        # pdfFileObj = open('D:/Projects/project_stark/starkAIapi/app/common/makedecision/RahulSarkar_resume.pdf', 'rb')
-        # pdfReader = PyPDF2.PdfFileReader(pdfFileObj)
-        # pageObj = pdfReader.getPage(0)
-        # inp = pageObj.extractText()
-        # cleandata= cleanDataset(inp)
-        #
-        # # closing the pdf file object
-        # pdfFileObj.close()
-        for i in input_data:
-            predicted_data = clf.predict(loaded_vectorizer.transform([i]))
-            category_list.append(predicted_data[0])
+        pdfFileObj = open('D:/Projects/project_stark/starkAIapi/app/common/makedecision/RahulSarkar_resume.pdf', 'rb')
+        pdfReader = PyPDF2.PdfFileReader(pdfFileObj)
+        pageObj = pdfReader.getPage(0)
+        inp = pageObj.extractText()
+        cleandata= cleanDataset(inp)
+
+        # closing the pdf file object
+        pdfFileObj.close()
+        # for i in input_data:
+        predicted_data = clf.predict(loaded_vectorizer.transform([cleandata]))
+        category_list.append(predicted_data[0])
         return category_list
     except Exception as err:
         return f"Decision maker error: {err}"

@@ -7,6 +7,8 @@ export access='minioadmin'
 export secret='minioadmin'
 export region='ap-south-1'
 export REDIS_ENDPOINT='redis://localhost:6379'
+export RESUME_SOURCE_PATH='s3://datasets/csv_data/resume_data.csv'
+export RESUME_BUCKET='resumes'
 
 export SQLDBURI='mysql+pymysql://root:123456789@localhost/stark_dev'
 export USER='root'

@@ -7,7 +7,7 @@ from app.config.get_db import get_db
 from app.controllers.csv2mysqlController import CSV2Mysql
 from app.controllers.csv2postgresqlController import CSV2Postgresql
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, File, UploadFile
 from app.schema.Csv2MysqlSchema import Csv2MysqlSchema
 from app.schema.TranslateSchema import TranslateSchema
 from app.schema.SymptopmSchema import SymptopmSchema
@@ -19,8 +19,17 @@ from app.schema.Sql2SqlSchema import Sql2SqlSchema
 from app.pipelines.migration.Sql_to_Sql.tasks import sql_to_sql_task_run
 from app.controllers.resumeScreeningController import saveResumeScreeningModel, resumeScreeningController
 from app.schema.ResumeScreeningSchema import ResumeScreeningSchema
+from app.controllers.resumeUploadController import ResumeUploadController
+from typing import List
+from app.config.init_db_tables import init_db
 
 router = APIRouter()
+
+
+@router.post("/api/v1/upload_resume")
+def resume_upload_route(resume_files: List[UploadFile] = File(...), db: Session = Depends(get_db)):
+    res = ResumeUploadController(files=resume_files, db=db)
+    return res
 
 
 @router.get("/api/v1/generate_resume_model")
@@ -55,6 +64,7 @@ def translation_route(input_details: TranslateSchema):
 
 @router.post('/api/v1/generate_all_table')
 def createAlldb(db: Session = Depends(get_db)):
+    init_db(db)
     return JSONResponse(content="All tables created!")
 
 
