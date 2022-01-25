@@ -19,7 +19,7 @@ from app.schema.Sql2SqlSchema import Sql2SqlSchema
 from app.pipelines.migration.Sql_to_Sql.tasks import sql_to_sql_task_run
 from app.controllers.resumeScreeningController import saveResumeScreeningModel, resumeScreeningController
 from app.schema.ResumeScreeningSchema import ResumeScreeningSchema
-from app.controllers.resumeUploadController import ResumeUploadController
+from app.controllers.resumeController import ResumeUploadController, GetResumeData
 from typing import List
 from app.config.init_db_tables import init_db
 
@@ -29,6 +29,12 @@ router = APIRouter()
 @router.post("/api/v1/upload_resume")
 def resume_upload_route(resume_files: List[UploadFile] = File(...), db: Session = Depends(get_db)):
     res = ResumeUploadController(files=resume_files, db=db)
+    return res
+
+
+@router.get("/api/v1/get_resume_data")
+def resume_get_route(db: Session = Depends(get_db)):
+    res = GetResumeData(db=db)
     return res
 
 
@@ -51,7 +57,7 @@ def symptom_route(input_details: SymptopmSchema):
 
 
 @router.post("/api/v1/resume_screening")
-def symptom_route(input_details: ResumeScreeningSchema):
+def resume_route(input_details: ResumeScreeningSchema):
     res = resumeScreeningController(input_skills=input_details)
     return res
 
