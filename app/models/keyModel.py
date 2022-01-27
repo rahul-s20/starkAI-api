@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Boolean
 from app.config.base_class import Base
 
 
@@ -8,3 +8,4 @@ class Keys(Base):
     api_key = Column(String(20), nullable=False)
     email = Column(String(100), nullable=False, unique=True)
     timestamp = Column(DateTime, default=datetime.utcnow)
+    isActive = Column(Boolean, default=True, nullable=False)

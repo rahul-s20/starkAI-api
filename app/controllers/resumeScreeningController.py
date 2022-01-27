@@ -18,7 +18,7 @@ def saveResumeScreeningModel() -> JSONResponse:
 def resumeScreeningController(input_skills: ResumeScreeningSchema) -> JSONResponse:
     cleand_data_list = []
     try:
-        if len(input_skills.skills)>0:
+        if len(input_skills.skills) > 0:
             for i in input_skills.skills:
                 clean_data = cleanDataset(i)
                 cleand_data_list.append(clean_data)
@@ -26,3 +26,17 @@ def resumeScreeningController(input_skills: ResumeScreeningSchema) -> JSONRespon
             return JSONResponse(content={"status": True, "type": "Resume Screening", "data": category})
     except Exception as er:
         return JSONResponse(content={"status": False, "type": "Resume Screening", "data": f'{er}'})
+
+
+def resumeScreeningControllerForAnalysis(input_skills: list) -> list:
+    cleand_data_list = []
+    try:
+        if len(input_skills) > 0:
+            for i in input_skills:
+                clean_data = cleanDataset(i)
+                cleand_data_list.append(clean_data)
+            category = decider(input_data=cleand_data_list)
+            return category
+    except Exception as er:
+        cleand_data_list.append(er)
+        return cleand_data_list

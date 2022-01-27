@@ -8,3 +8,4 @@ class UploadedResumes(Base):
     name = Column(String(2000), nullable=False)
     is_screened = Column(Boolean, default=False, nullable=False)
     timestamp = Column(DateTime, default=datetime.utcnow)
+    isActive = Column(Boolean, default=True, nullable=False)
