@@ -54,6 +54,13 @@ def resume_get_route(db: Session = Depends(get_db)):
     return res
 
 
+@router.get("/api/v1/get_resume_analysis_data")
+def resume_analysis_get_route(db: Session = Depends(get_db)):
+    resumeObj = ResumeController()
+    res = resumeObj.get_resumeProfileData(db=db)
+    return res
+
+
 @router.get("/api/v1/generate_resume_model")
 def resume_modelsave_route():
     res = saveResumeScreeningModel()

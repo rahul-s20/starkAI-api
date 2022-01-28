@@ -24,6 +24,9 @@ class STARKBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
     def get(self, db: Session, id: Any) -> Optional[ModelType]:
         return db.query(self.model).filter(self.model.id == id).first()
 
+    def get_resumeProfile_by_resumeId(self, db: Session, resumeId: Any) -> Optional[ModelType]:
+        return db.query(self.model).filter(self.model.resumeId == resumeId).first()
+
     def get_user_by_email(self, db: Session, email: Any) -> Optional[ModelType]:
         return db.query(self.model).filter(self.model.email == email).first()
 

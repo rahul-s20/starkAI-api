@@ -1,0 +1,21 @@
+SKILLS_DB = [
+    'machine learning', 'data science', 'python', 'word', 'excel', 'English', 'flask API', 'flask', 'api',
+    'data engineering ', 'etl pipeline dev', 'docker', 'kubernetes', 'celery framework', 'azure', 'aws', 'redis',
+    'node.js', 'express', 'mongo db', 'api integration', 'linear regression', 'multiple linear regression',
+    'decision tree & random forest', 'confusion matrix', 'logistic', 'clustering', 'reinforcement learning',
+    'sci-kitlearn', 'pandas', 'matplotlib', 'numpy', 'selenium web driver ', 'rest api', 'postgresql', 'linux',
+    'windows', 'git', 'nagios', 'bitbucket', 'critical thinking & quick learner', 'customer & client relationship',
+    'learn new technologies', 'adaptability to changes', 'motivated and committed', 'html5', 'css3', 'javascript',
+    'jquery', 'oracle sql developer', 'sql server management studio', 'salesforce crm (admin and configuration)',
+    'salesforce lightning', 'microsoft office 365', 'tableau', 'postman', 'data loader', 'reporting and dashboarding',
+    'pharma domain knowledge', 'salesforce', 'iot (internet of things)', 'edge computing', 'artificial intelligence',
+    'matlab', 'aws', 'iot', 'eaglecad', 'node', 'red', 'ros', 'embedded software', 'fusion360', 'solidworks', 'react',
+    'react.js', 'angular', 'angular.js', 'computer basic', 'typing speed', 'ms powerpoint ', 'ms excel',
+    'microsoft word', 'ms excel', 'boolean search', 'ats tool', 'hris tool', 'success factor', 'outlook', 'workday',
+    'naukri', 'linkedin ', 'zoom', 'itsm tools', 'bmc remedy', 'service now', 'vivantio', 'oracle osm', 'cloud',
+    'microsoft azure', 'azure cloudwatch', 'azure monitor', 'solarwind(orion)', 'thousandeye', 'downdetector',
+    'appneta', 'ms office', 'ms teams', 'exceptional grooming knowledg', 'communication skills', 'convincing peopl',
+    'positive attitude', 'photoshop', 'video editing', 'java', 'pl sql', 'frontend', 'backend', 'team work',
+    'celery framework', 'celery', 'rabbitmq', 'kafka', 'redis', 'jira', 'mysql', 'sales and marketing', 'sales',
+    'marketing'
+]

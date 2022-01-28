@@ -7,4 +7,6 @@
 ### SQL to SQL migration (Celery)
 ### Language Translation (NLP implementation)
 ### Sick symptomp detector (NLP implementation)
-### Youtube video transcript maker (ML implementation)
+### Resume screening (ML Implementation)
+
+python -m nltk.downloader stopwords
