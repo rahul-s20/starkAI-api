@@ -2,8 +2,8 @@ import awswrangler as wr
 import boto3
 from os import environ as env
 from botocore.client import Config
-from PyPDF2 import PdfFileReader
 from io import BytesIO
+from app.common.helpers.pdf_reader import extract_text_pdf_s3
 
 
 class S3_Helper:
@@ -35,22 +35,17 @@ class S3_Helper:
             return None
 
     def read_pdf_s3(self, bucket_name: str, file_name: str):
-        string_data = ''
         try:
             obj = self.s3_resource.Object(bucket_name, file_name)
             fs = obj.get()['Body'].read()
-            pdfFile = PdfFileReader(BytesIO(fs))
-            pageCount = pdfFile.numPages
-            for i in range(pageCount):
-                string_data += pdfFile.getPage(i).extractText()
-            return string_data
+            text = extract_text_pdf_s3(BytesIO(fs))
+            return text
         except Exception as er:
             print(f"error: Unable to read csv: {er}")
             return None
 
     def upload_s3(self, files, bucket_name: str) -> bool:
         try:
-
             s3bucket = self.s3_resource.Bucket(bucket_name)
             if len(files) > 0:
                 for file in files:
@@ -59,3 +54,12 @@ class S3_Helper:
         except Exception as er:
             print(f"Upload not working: {er}")
             return False
+
+    def get_file_s3(self, filename, bucket_name: str):
+        try:
+            get_obj = self.s3_resource.Object(bucket_name, filename)
+            downloaded_obj = get_obj.get()["Body"]
+            return downloaded_obj
+        except Exception as er:
+            print(f"Get object is not working: {er}")
+            return None

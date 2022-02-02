@@ -34,8 +34,8 @@ class ResumeDataHandle:
         data = self.stark_base.get_multi(db=db, limit=0)
         return data
 
-    def get_resume_detail(self, db: Session):
-        pass
+    def get_resume_detail(self, db: Session, id: Any):
+        return self.stark_base.get(db=db, id=id)
 
     def insert_data(self, db: Session, db_obj: dict):
         res = self.stark_base.create(db=db, obj_in=db_obj)

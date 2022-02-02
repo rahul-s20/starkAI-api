@@ -3,15 +3,13 @@ from os import environ as env
 from app.models.ResumeUploadModel import UploadedResumes
 from app.models.ResumeProfiles import ResumeProfiles
 from sqlalchemy.orm import Session
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, StreamingResponse
 from app.helpers.ResumeDataHandler import ResumeDataHandle, updateResume_data, ResumeProfileDataHandler, \
     updateResume_profile_data
 from app.schema.ResumeAnalysisSchema import ResumeAnalysisSchema
 from app.controllers.resumeScreeningController import resumeScreeningControllerForAnalysis
 from app.common.makedecision.skills_extrctor import SkillsExtractor
 from datetime import datetime
-import requests
-import json
 import re
 
 
@@ -103,19 +101,30 @@ class ResumeController:
                         update_profile_obj["skills"] = profile_list[index]["skills"]
                         update_profile_obj["timestamp"] = datetime.utcnow()
                         updateResume_profile_data(db=db, modelClass=ResumeProfiles, obj_in=update_profile_obj)
-
                 return JSONResponse(content={"status": True, "type": "ResumeAnalyzer", "data": 'Analyzed successfully'})
             else:
                 return JSONResponse(content={"status": True, "type": "ResumeAnalyzer", "data": "Something went wrong"})
         except Exception as er:
             return JSONResponse(content={"status": False, "type": "ResumeAnalyzer", "data": f"{er}"})
 
-    def get_resumeProfileData(self, db: Session):
+    async def get_resumeProfileData(self, db: Session):
+        response_data = []
         try:
             data = self.resumeProfileObj.get_all_resume_profile(db=db)
-            return {"status": True, "type": "GetResumeProfileData", "data": data}
+            for i in data:
+                uploadedResume = self.resumeDataObj.get_resume_detail(db=db, id=i.resumeId)
+                i.resumeId = uploadedResume.name
+                response_data.append(i)
+            return {"status": True, "type": "GetResumeProfileData", "data": response_data}
         except Exception as er:
-            return JSONResponse(content={"status": False, "type": "GetResumeProfileData", "data": f"{er}"})
+            return {"status": False, "type": "GetResumeProfileData", "data": f"{er}"}
+
+    def get_resumePdf(self, file_name: str):
+        try:
+            data = self.s3obj.get_file_s3(filename=file_name, bucket_name='resumes')
+            return StreamingResponse(data, media_type="application/pdf")
+        except Exception as er:
+            return JSONResponse(content={"status": False, "type": "GetResumePDF", "data": f"{er}"})
 
 
 def is_pdf(files: list) -> bool:
@@ -141,8 +150,7 @@ def extract_nameV2(resume_text: str):
 
 
 def extract_mobile_number(resume_text: str) -> str:
-    phone = re.findall(re.compile(
-        r'(\d{3}[-\.\s]??\d{3}[-\.\s]??\d{4}|\(\d{3}\)\s*\d{3}[-\.\s]??\d{4}|\d{3}[-\.\s]??\d{4})'),
+    phone = re.findall(re.compile(r'[\+\(]?[1-9][0-9 .\-\(\)]{8,}[0-9]'),
         resume_text)
     if phone:
         number = ''.join(phone[0])
@@ -155,7 +163,7 @@ def extract_mobile_number(resume_text: str) -> str:
 
 
 def extract_email(resume_text: str) -> str:
-    email = re.findall(r'[a-z0-9\.\-+_]+@[a-z0-9\.\-+_]+\.[a-z]+', resume_text)
+    email = re.findall(re.compile(r'[a-z0-9\.\-+_]+@[a-z0-9\.\-+_]+\.[a-z]+'), resume_text)
     if email:
         try:
             return email[0].split()[0].strip(';')
@@ -163,19 +171,3 @@ def extract_email(resume_text: str) -> str:
             return None
     else:
         return 'No Email detected'
-
-
-def extract_skills(resume_text: str) -> str:
-    try:
-        url = "https://api.iki.ai/api/skills_extraction/"
-        payload = {
-            "text": str(resume_text[0:2000])
-        }
-
-        headers = {
-            'Content-Type': 'application/json'
-        }
-        r = requests.post(url=url, headers=headers, data=json.dumps(payload))
-        return r.json()
-    except Exception as er:
-        return er

@@ -14,7 +14,6 @@ from app.schema.SymptopmSchema import SymptopmSchema
 from app.schema.KeySchema import Keyssc
 from fastapi.responses import JSONResponse
 from app.pipelines.migration.csv_to_db.tasks import csv_to_sql_task_run
-from app.controllers.sql2sqlController import SQL2SQL
 from app.schema.Sql2SqlSchema import Sql2SqlSchema
 from app.pipelines.migration.Sql_to_Sql.tasks import sql_to_sql_task_run
 from app.controllers.resumeScreeningController import saveResumeScreeningModel, resumeScreeningController
@@ -54,10 +53,17 @@ def resume_get_route(db: Session = Depends(get_db)):
     return res
 
 
-@router.get("/api/v1/get_resume_analysis_data")
-def resume_analysis_get_route(db: Session = Depends(get_db)):
+@router.get("/api/v1/get_resume_pdf")
+def resume_get_resumePdf(resume_name: str):
     resumeObj = ResumeController()
-    res = resumeObj.get_resumeProfileData(db=db)
+    res = resumeObj.get_resumePdf(file_name=resume_name)
+    return res
+
+
+@router.get("/api/v1/get_resume_analysis_data")
+async def resume_analysis_get_route(db: Session = Depends(get_db)):
+    resumeObj = ResumeController()
+    res = await resumeObj.get_resumeProfileData(db=db)
     return res
 
 

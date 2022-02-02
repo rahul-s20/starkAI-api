@@ -1,12 +1,9 @@
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
-from scipy.sparse import hstack
 from sklearn.multiclass import OneVsRestClassifier
 from sklearn.neighbors import KNeighborsClassifier
 import joblib
 import pandas as pd
-import PyPDF2
-from app.helpers.initiater import cleanDataset
 
 
 class ResumeDecisionMaker:
@@ -43,13 +40,3 @@ def decider(input_data: list):
         return category_list
     except Exception as err:
         return f"Decision maker error: {err}"
-
-
-# pdfFileObj = open('D:/Projects/project_stark/starkAIapi/app/common/makedecision/RahulSarkar_resume.pdf', 'rb')
-# pdfReader = PyPDF2.PdfFileReader(pdfFileObj)
-# pageObj = pdfReader.getPage(0)
-# inp = pageObj.extractText()
-# cleandata= cleanDataset(input_data)
-
-# # closing the pdf file object
-# pdfFileObj.close()
