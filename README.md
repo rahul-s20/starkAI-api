@@ -10,3 +10,6 @@
 ### Resume screening (ML Implementation)
 
 python -m nltk.downloader stopwords
+
+sudo apt-get install -y python3-psycopg2
+

@@ -1,3 +1,4 @@
+wheel~=0.36.2
 amqp==5.0.6
 anyio==3.3.4
 asgiref==3.4.1
@@ -87,7 +88,7 @@ seaborn==0.11.2
 matplotlib==3.2.1
 wordcloud==1.8.1
 pdfminer
-psycopg2==2.7.3.2
+psycopg2-binary
 nltk~=3.5
 py~=1.10.0
 colorama~=0.4.4
@@ -104,7 +105,6 @@ Pillow~=4.0.0
 olefile~=0.46
 pip~=21.1.2
 toml~=0.10.2
-wheel~=0.36.2
 google~=2.0.3
 rsa~=4.7
 pyasn1~=0.4.8
@@ -116,12 +116,10 @@ h5py~=2.10.0
 dataclasses
 isort~=5.7.0
 setuptools~=53.0.0
-
 isodate~=0.6.0
 torch~=1.9.0
 astunparse~=1.6.3
 dill~=0.3.4
-
 psutil~=5.6.7
 cachetools~=4.2.1
 protobuf~=3.14.0

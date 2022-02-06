@@ -1,4 +1,6 @@
-FROM python:3.8
+FROM python:3.7-alpine
+
+ENV PYTHONUNBUFFERED 1
 
 RUN mkdir -p /home/app
 # Environment Variables
@@ -9,6 +11,8 @@ ENV access=minioadmin
 ENV secret=minioadmin
 ENV region=ap-south-1
 ENV REDIS_ENDPOINT=redis://localhost:6379
+ENV RESUME_SOURCE_PATH=s3://datasets/csv_data/resume_data.csv
+ENV RESUME_BUCKET=resumes
 
 COPY requirementslin.txt .
 
