@@ -1,0 +1,51 @@
+version: '3'
+ 
+services:
+  app:
+    container_name: starkapi
+    image: starkapi:latest
+    build:
+      context: .
+    ports:
+      - 5001:5001
+    expose:
+      - 5001  
+    environment:
+      - SQLDBURI=postgresql+psycopg2://postgres:123456789@db:5432/stark_dev_test
+      - REDIS_ENDPOINT=redis://redis:6379
+      - OVERRIDE_S3_ENDPOINT=http://localhost:9000/
+      - SOURCE_BUCKET=dataexports
+      - SOURCE_PATH=s3://dataENVs/csv_data/stark_doc_data.csv
+      - access=minioadmin
+      - secret=minioadmin
+      - region=ap-south-1
+      - RESUME_SOURCE_PATH=s3://datasets/csv_data/resume_data.csv
+      - RESUME_BUCKET=resumes
+      - USER=postgres
+      - PASSWORD=123456789
+      - HOST=db:5432
+      - DB=stark_dev_test  
+    volumes:
+      - ./app:/app
+    depends_on:
+      - db  
+      - redis
+    command: >
+      sh -c "python3 main.py main:app --reload --host 0.0.0.0 --port 5001"
+
+  db:
+    container_name: postgres-sqldb
+    image: postgres
+    environment:
+      - POSTGRES_DB=stark_dev_test
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123456789
+    ports:
+      - 5432:5432
+    volumes:
+      - pgdata:/app/postgresql/data 
+  redis:
+    image: redis:latest         
+
+volumes:
+  pgdata: {}      
